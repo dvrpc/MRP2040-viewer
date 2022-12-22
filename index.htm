@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>DVRPC - Major Regional Transportation Projects</title>
+
+    <!-- Core CSS -->
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/tooltip.css">
+    <!--[if lte IE 8]>
+        <link href="https://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" rel="stylesheet" type="text/css">
+        <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <style>
+        html, body, #map, #sidebar, #container {
+            height: 100%;
+            margin: 0px;
+        }
+        body {
+            padding-top: 50px;
+			overflow-y:hidden;
+        }
+        label {
+            font-weight: normal;
+        }
+  
+        .panel-heading a:hover {
+            text-decoration: none;
+        }
+        #loading {
+            position: absolute;
+            width: 220px;
+            height: 19px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -110px;
+            z-index: 20001;
+        }
+		#title{
+		  position: absolute;
+            width: 220px;
+            height: 19px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -110px;
+            z-index: 20001;
+		}
+		
+        .navbar .navbar-brand {
+            font-weight: bold;
+            font-size: 22px;
+            color: white;
+            white-space: nowrap;
+        }
+		.navbar-inverse{
+     /* blue   background-color:#0074ad; */
+        background-color: rgb(95, 90, 89);
+		}
+		
+        .tt-dropdown-menu {
+            overflow: auto;
+        }
+        .tt-hint, .tt-query {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        .leaflet-popup-content {
+            margin-top: 14px;
+            margin-bottom: 0px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+    @media (max-width: 1200px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin: 7.5px -15px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
+        @media (max-width: 992px) {
+            .navbar .navbar-brand {
+                font-size: 18px;
+                float: left;
+            }
+            .search-container {
+                width: 150px;
+            }
+            .leaflet-control-attribution {
+                display: none;
+            }
+        }
+        @media (max-width: 768px){
+            .search-container {
+                width: 100%;
+            }
+        }
+        /* Print Handling */
+        @media print {
+            .navbar, .toggle, #sidebar {
+                display: none !important;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 1000px) {
+   .collapse {
+       display: none !important;
+   }
+}
+	
+		.navbar-inverse .navbar-nav > li > a {
+    color: rgb(200, 200, 200);
+	
+}
+.modal-header {
+/* blue  background-color:#0074ad; */
+ background-color: rgb(95, 90, 89);
+}
+
+.modal-title  {
+color: white;
+}
+
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    color: white;
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    opacity: 1;
+}
+
+	 #legendBox {
+            position: absolute;
+            top: 25px;
+            left: 10px;
+            z-index: 1001;
+            padding: 2px;
+            background: rgba(255, 255, 255, 0.01);
+        }
+		
+table, th, td {
+   border: 1px solid black;
+   padding:5px;
+   text-align: center; 
+} 	
+.nav-left {
+            border-bottom: 1px solid transparent;
+            border-right: 1px solid #ddd;
+        }
+        .nav-left>li>a {
+            border-radius: 4px 0 0 4px;
+            margin-right: -1px;
+            color: #666;
+        }
+        .nav-left>li>a:hover {
+            border-color: #eee #ddd #eee #eee;
+        }
+        .nav-left>li.active>a,
+        .nav-left>li.active>a:hover,
+        .nav-left>li.active>a:focus {
+            border: 1px solid #ddd;
+            border-right-color: transparent;
+        }
+	#legend {
+    background: white;
+	margin-left:8px;
+  }
+   
+.modal-dialog {
+    width:800px;
+  padding-top: 5%;
+}
+table.gridtable {
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+}
+table.gridtable th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
+}
+table.gridtable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+}
+
+    </style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.2.0/respond.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+        <script src="js/css3-mediaqueries.ie.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+			   <span>
+                <a href="//www.dvrpc.org" target="_new">
+                    <img class="dvrpclogo" style="margin:10px 0px 0px 4px" src="img/dvrpclogo.png" />
+                </a>
+                <img class="dvrpclogo" style="margin:0px 0px 0px 0px" src="img/2040w.png" />
+            </span>
+        </div>
+         <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#aboutModal').modal('show'); return false;">
+                        <i class="icon-question-sign" style="color: white"></i>&nbsp;&nbsp;About</a>
+                </li>
+                <li>
+                    <a href="#" onclick="$('#LegendModal').modal('show'); return false;">
+                    <i class="icon-picture" style="color: white"></i>&nbsp;&nbsp;Project Category Description</a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="$('#UMModal').modal('show'); return false;">
+                        <i class="icon-list-alt" style="color: white"></i>&nbsp;&nbsp;Unmapped Projects</a>
+                </li>
+
+                <li class="dropdown">
+                    <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-wrench" style="color: white"></i>&nbsp;&nbsp;Tools
+                        <b class="caret"></b>
+                    </a>
+                <ul class="dropdown-menu">
+                        <li  id="zoomToRegion"><a href="javascript:void(0);"><i class="icon-fullscreen"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                 </ul>
+                </li>    
+            </ul>
+        <!--    <form class="navbar-form navbar-right">
+                <div class="input-group search-container">
+                    <input id="searchbox" type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-addon">
+                        <i class="icon-search"></i>
+                    </span>
+                </div>
+            </form> -->
+        </div>
+    </div>
+
+ <div class="row" id="container">
+        <!-- start sidebar -->
+    <div class="col-sm-4 col-lg-4" id="sidebar" style="padding: 10px; overflow: auto;">
+            
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_" href="#overlay-layers">
+                                    Major Regional Transportation Projects
+                                </a>
+                            </div>
+                            <div id="overlay-layers" class="panel-collapse collapse in">
+                                <div class="panel-body" style="padding: 0px 15px;">
+                                     <p style="color:grey;margin-top: 10px;">(click icon for project category description)</p>
+                                  <div class="checkbox">
+                                      <input id="roadway" type="checkbox"  class="cb" onClick="toggleLayer(data1,'roadway')" checked><img src='img/pr_rd.png'width='28' height='28' value="rd_pr" onclick="legendraw(this);return value" >&nbsp;Roadway System Preservation
+   <!--    <input id="roadway" type="checkbox"  onClick="toggleLayer(data1,'roadway');toggleLayer(data1p,'roadway')" checked><img src='img/pr_rd.png'width='28' height='28' value="rd_pr" onclick="legendraw(this);return value" >&nbsp;Roadway System Preservation
+     -->                                                               
+								   </div>   
+                                        <div class="checkbox">
+                                        <input id="rdop" type="checkbox"  class="cb" onClick="toggleLayer(datardop,'rdop')" checked><img src='img/op_rd.png'width='28' height='28' value="rd_op" onclick="legendraw(this);return value" >&nbsp;Roadway Operational Improvements
+                                    </div> 
+                                  
+                                        <div class="checkbox">
+                                       <img src='img/ex_rd.png'width='28' height='28' value="rd_exp" onclick="legendraw(this);return value" >&nbsp;Roadway System Expansion
+                                    </div>   
+                               
+                                      <ul> 
+                                       <div class="checkbox">
+                                       <input id="rdexp" type="checkbox"  class="cb" onClick="toggleLayer(datardexp,'rdexp')" checked>&nbsp;Major System Expansion<br>  
+                                       <input id="rdexp_minor" type="checkbox"  class="cb" onClick="toggleLayer(datardexp_minor,'rdexp_minor')" checked>&nbsp;Minor System Expansion
+                                    </div> 
+                                        </ul>
+                                        <div class="checkbox">
+                                        <input id="rdo" type="checkbox"  class="cb" onClick="toggleLayer(datardo,'rdo')" checked><img src='img/other_rd.png'width='28' height='28' value="rd_other" onclick="legendraw(this);return value">&nbsp;Roadway Other
+                                    </div>   
+                                     <div class="checkbox">
+                                       <input id="transit" type="checkbox" class="cb" onClick="toggleLayer(data3,'transit');toggleLayer(data3p,'transit')" checked><img src='img/pr_tr.png'width='28' height='28' value="tr_pr" onclick="legendraw(this);return value">&nbsp;Transit System Preservation
+                                    </div>
+                                     <div class="checkbox">
+                                        <input id="trop" type="checkbox" class="cb" onClick="toggleLayer(datatrop,'trop')" checked><img src='img/op_tr.png'width='28' height='28' value="tr_op" onclick="legendraw(this);return value">&nbsp;Transit Operational Improvements
+                                    </div>
+                                     <div class="checkbox">
+                                        <input id="exp_transit" type="checkbox" class="cb"  onClick="toggleLayer(data4,'exp_transit')" checked><img src='img/ex_tr.png'width='28' height='28' value="tr_exp" onclick="legendraw(this);return value">&nbsp;Transit System Expansion
+                                    </div>
+                                     <div class="checkbox">
+                                        <input id="extf" type="checkbox" class="cb" onClick="toggleLayer(dataextf,'extf')" checked><img src='img/ext_fundL.png'width='28' height='28' value="ext_fund" onclick="legendraw(this);return value">&nbsp;External Funded
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   <!--      <h3>Project Information</h3> -->
+                        <div id="carousel-example-generic" class="carousel" data-ride="carousel">
+                            <div class="carousel-inner" id="infosidebar">
+
+                            </div>
+                            <div class="text-center">
+                                <ul class="pagination pagination-sm" style="margin:5px 0"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <!-- END sidebar -->
+    <!-- Start Map -->
+        <div class="col-sm-8 col-lg-8" id="map"></div>	 
+		  <div id="tooltip2"></div>
+     <!-- End Map -->   
+	 
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.6.0/bootstrap-table.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.6.0/bootstrap-table.min.js"></script>
+
+<!-- Latest compiled and minified Locales -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.6.0/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAvK54P-Pb3skEYDLFVoRnSTLtRyG5GJ6U"></script> 
+	<script type="text/javascript" src="js/keydragzoom.js"></script>   
+	<script type="text/javascript" src="js/tooltip.js"></script>        
+    <script src="js/numeral.js"></script>
+	
+ <script>
+var map;
+var MY_MAPTYPE_ID = 'Base Map';
+var streetViewService = new google.maps.StreetViewService();
+
+var region = new google.maps.LatLng(39.950143, -75.170669);
+
+
+function toggleLayer(dataLayer,id)
+        {
+            if ($('#'+id).is(':checked')) {
+                dataLayer.setMap(map);
+            }
+            else
+            {
+                dataLayer.setMap(null);
+            }
+        }
+	
+function legendraw(element) {
+   //   e.preventDefault()
+  // event.preventDefault()
+    $('#LegendModal').one('shown.bs.modal', function() {
+    $('#legendTabs a[href="#' +element.getAttribute("value") + 'Tab"]').tab('show'); }).modal('show');
+// alert(element.getAttribute("value")); 
+}    
+
+function initialize() {
+ $('#aboutModal').modal();
+ $('.cb').prop('checked', true);
+var stylez = [
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "saturation": -50
+            },
+            {
+                "lightness": 65
+            },
+			{
+                "color": "#F7F7F6"
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 51
+            },
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 30
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 40
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.province",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "lightness": -25
+            },
+            {
+                "saturation": -100
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "hue": "#ffff00"
+            },
+            {
+                "lightness": -25
+            },
+            {
+                "saturation": -97
+            }
+        ]
+    }
+];
+
+  // Create a simple map.
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 9,
+    center: {lat: 39.950143, lng:-75.170669 },
+    mapTypeId: MY_MAPTYPE_ID,  
+	mapTypeControlOptions: {
+	mapTypeIds: [MY_MAPTYPE_ID,google.maps.MapTypeId.SATELLITE,google.maps.MapTypeId.HYBRID],
+	style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+	panControl: false,
+	zoomControl: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.SMALL
+    },
+   // draggableCursor: 'pointer', // every pixel is clickable.
+    streetViewControl: true //my favorite feature in V3!
+  });
+
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+  document.getElementById('tooltip2'));
+  
+  map.enableKeyDragZoom();  
+ 
+ var styledMapOptions = {
+    name: "Map",
+	alt:"Show base map"
+  }; 
+  
+ var jayzMapType = new google.maps.StyledMapType(stylez, styledMapOptions);
+ map.mapTypes.set(MY_MAPTYPE_ID,jayzMapType);
+ 
+ var overlay = new google.maps.OverlayView();
+    overlay.draw = function () {};
+    overlay.setMap(map); 
+
+// Start Preservation Roadway Linear
+    data1 = new google.maps.Data();
+    data1.loadGeoJson('data/pr_rd.js');
+    data1.setMap(map);
+    data1.setStyle(function (feature) {
+        color = feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9'
+    return {
+        clickable: true,
+        fillOpacity: .5,  
+		fillColor: color,		
+        strokeColor: color,
+        zIndex:99,
+        strokeWeight: 4
+            }
+        });
+
+     data1.addListener('mouseover', function (e) {
+      var offset = overlay.getProjection().fromLatLngToDivPixel(e.latLng)
+      bgcolor = e.feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9';
+       $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    data1.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })   
+
+
+
+    data1.addListener('click', function(e) {
+	     data1.revertStyle();
+        data1.overrideStyle(e.feature,{ 
+		clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000',
+        strokeWeight: 4
+		});
+    });
+    
+    data1.addListener('click', function(e) {
+	    data3.revertStyle();
+		data4.revertStyle();
+	    datatrop.revertStyle();
+	    dataextf.revertStyle();
+		datardop.revertStyle();
+		datardexp.revertStyle();
+		datardo.revertStyle();
+        datardexp_minor.revertStyle();
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+		
+	var tips = [];
+        for (var i = 1; i <= 22; i++) {
+        	if (e.feature.getProperty('tip'+i)) {
+        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+        	}
+        }
+	  //  + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+	  
+       var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td> '+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table>'
+        + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+            +  '<br><form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+         +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Preservation Roadway Linear
+
+
+// Start Operational  Roadway Linear
+    datardop = new google.maps.Data();
+    datardop.loadGeoJson('data/op_rd.js');
+    datardop.setMap(map);
+    datardop.setStyle(function (feature) {
+        color = feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9'
+    return {
+        clickable: true,
+        fillOpacity: .5,   
+		fillColor: color, 
+	    strokeColor: color ,
+        zIndex:98,
+        strokeWeight: 4
+            }    
+        });
+
+     datardop.addListener('mouseover', function (e) {
+      var offset = overlay.getProjection().fromLatLngToDivPixel(e.latLng)
+            bgcolor = e.feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9';
+      $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    datardop.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })   
+
+
+    datardop.addListener('click', function(e) {
+	     datardop.revertStyle();
+        datardop.overrideStyle(e.feature,{ 
+		 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    datardop.addListener('click', function(e) {
+	    data1.revertStyle();
+		data3.revertStyle();
+		data4.revertStyle();
+	    datatrop.revertStyle();
+	    dataextf.revertStyle();
+		datardexp.revertStyle();
+		datardo.revertStyle();
+        datardexp_minor.revertStyle();
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+  
+        if (e.feature.getProperty('TIP1a')==='0'){ var TIPA = '';}
+        else { var TIPA =  '<br><b>Tip Project(s): </b>  <a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('TIP1a')+'" target="_blank">'+ e.feature.getProperty('TIP1a')+'</a>';}
+
+
+		var tips = [];
+        for (var i = 1; i <= 22; i++) {
+        	if (e.feature.getProperty('tip'+i)) {
+        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+        	}
+        }
+	  //  + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+		
+       var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th></tr></thead>'
+		+'<tbody><tr><td> '+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table>'
+        +TIPA
+		+ (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+
+            +  '<br><form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+         +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Operational Roadway Linear
+
+// Start Expansion Roadway Linear
+    datardexp = new google.maps.Data();
+    datardexp.loadGeoJson('data/exp_rd.js');
+    datardexp.setMap(map);
+    datardexp.setStyle(function (feature) {
+    
+    color = feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9'
+
+    return {
+        clickable: true,
+        fillOpacity: .5,   
+		fillColor: color,
+        strokeColor: color,
+        zIndex:97,
+        strokeWeight: 4
+            }
+        
+        });
+
+    datardexp.addListener('mouseover', function (e) {
+      var offset = overlay.getProjection().fromLatLngToDivPixel(e.latLng),
+      bgcolor = e.feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9';
+       $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    datardexp.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })   
+
+
+    datardexp.addListener('click', function(e) {
+	     datardexp.revertStyle();
+        datardexp.overrideStyle(e.feature,{ 
+		 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    datardexp.addListener('click', function(e) {
+	    data1.revertStyle();
+		data3.revertStyle();
+		data4.revertStyle();
+	    datatrop.revertStyle();
+	    dataextf.revertStyle();
+	    datardop.revertStyle();
+		datardo.revertStyle();
+        datardexp_minor.revertStyle();
+
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+		
+        if (e.feature.getProperty('TIP1a')==='0'){ var TIPA = '';}
+        else { var TIPA =  '<br><b>Tip Project(s): </b>  <a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('TIP1a')+'" target="_blank">'+ e.feature.getProperty('TIP1a')+'</a>';}
+        
+        if (e.feature.getProperty('TIP2a')==='0'){ var TIPB = '';}
+        else { var TIPB =  ',<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('TIP2a')+'" target="_blank">'+ e.feature.getProperty('TIP2a')+'</a>';}
+        
+        if (e.feature.getProperty('TIP3a')==='0'){ var TIPC = '';}
+        else { var TIPC =  ',<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('TIP3a')+'" target="_blank">'+ e.feature.getProperty('TIP3a')+'</a>';}
+
+        
+     	var tips = [];
+        for (var i = 1; i <= 22; i++) {
+        	if (e.feature.getProperty('tip'+i)) {
+        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+        	}
+        }
+	  
+       var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/> ' + e.feature.getProperty('FACILITY')+'</h4>' 
+		+'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>System Expansion Cost<br><i>(millions in Y-O-E $)</i></th><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td> '+ numeral(e.feature.getProperty('ExpanCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table>'
+        +TIPA
+        +TIPB
+        +TIPC
+	    + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+        +  '<br><form class="form-inline" role="form">'
+        +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+        +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Expansion Roadway Linear
+
+// Start Minor Expansion Roadway Linear
+    datardexp_minor = new google.maps.Data();
+    datardexp_minor.loadGeoJson('data/exp_rd_minor.js');
+    datardexp_minor.setMap(map);
+    datardexp_minor.setStyle(function (feature) {
+    
+    color = feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9'
+
+    return {
+        clickable: true,
+        fillOpacity: .5,   
+        fillColor: color,
+        strokeColor: color,
+        zIndex:97,
+        strokeWeight: 4
+            }
+        
+        });
+
+    datardexp_minor.addListener('mouseover', function (e) {
+      var offset = overlay.getProjection().fromLatLngToDivPixel(e.latLng),
+      bgcolor = e.feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9';
+       $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    datardexp_minor.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })   
+
+
+    datardexp_minor.addListener('click', function(e) {
+        datardexp_minor.revertStyle();
+        datardexp_minor.overrideStyle(e.feature,{ 
+        clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+        });
+    });
+    
+    datardexp_minor.addListener('click', function(e) {
+        datardexp.revertStyle();
+        data1.revertStyle();
+        data3.revertStyle();
+        data4.revertStyle();
+        datatrop.revertStyle();
+        dataextf.revertStyle();
+        datardop.revertStyle();
+        datardo.revertStyle();
+        if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+        else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+           
+        var tips = [];
+        for (var i = 1; i <= 22; i++) {
+            if (e.feature.getProperty('tip'+i)) {
+                tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+            }
+        }
+      
+       var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/> ' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>' + e.feature.getProperty('CATEGORY2') +' Project</b><br>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+        +'<br><B>State:</B> '+ e.feature.getProperty('State')
+        +'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+        +'<br><table class="infotable"><thead><tr><th>System Expansion Cost<br><i>(millions in Y-O-E $)</i></th><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+        +'<tbody><tr><td> '+ numeral(e.feature.getProperty('ExpanCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+        +'</table>'
+        + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+        +  '<br><form class="form-inline" role="form">'
+        +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+        +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Expansion Roadway Linear
+
+
+// Start Other  Roadway Linear
+    datardo = new google.maps.Data();
+    datardo.loadGeoJson('data/other.js');
+    datardo.setMap(map);
+    datardo.setStyle(function (feature) {
+        color = feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9'
+    return {
+        clickable: true,
+        fillOpacity: .5,   
+		fillColor: color,	
+        strokeColor: color,
+        zIndex:96,
+        strokeWeight: 4
+            }
+        });
+
+    datardo.addListener('mouseover', function (e) {
+      var offset = overlay.getProjection().fromLatLngToDivPixel(e.latLng)
+            bgcolor = e.feature.getProperty("VisionType") == 'Roadway - Funded' ? '#24527F' : '#90ABD9';
+           $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    datardo.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })   
+
+    datardo.addListener('click', function(e) {
+	     datardo.revertStyle();
+        datardo.overrideStyle(e.feature,{ 
+		 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    datardo.addListener('click', function(e) {
+	    data1.revertStyle();
+		data3.revertStyle();
+		data4.revertStyle();
+        datardexp.revertStyle();
+	    datatrop.revertStyle();
+	    dataextf.revertStyle();
+	    datardop.revertStyle();
+        datardexp_minor.revertStyle();
+
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+		
+     	
+     	var tips = [];
+        for (var i = 1; i <= 22; i++) {
+        	if (e.feature.getProperty('tip'+i)) {
+        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+        	}
+        }
+	  
+       var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table>'
+		+ (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+            +  '<br><form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+         +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Other Roadway Linear
+
+ // Start Preservation Transit Point
+    data3p = new google.maps.Data();
+    data3p.loadGeoJson('data/pr_tr_pts.js');
+    data3p.setMap(map);
+    data3p.setStyle(function (feature) {
+          color = feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B'
+    return {
+    clickable: false,      
+	  icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale:4,
+            fillColor: color,
+            fillOpacity: 0.75,
+			strokeColor: 'white',
+            zIndex:95,
+            strokeWeight: 1
+		}
+           }
+       });
+ // End Preservation Transit Point
+  
+// Start Preservation Transit Linear
+    data3 = new google.maps.Data();
+    data3.loadGeoJson('data/pr_tr.js');
+    data3.setMap(map);
+    data3.setStyle(function (feature) {
+          color = feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B'
+    return {
+        clickable: true,
+        fillOpacity: .5,   
+		fillColor: color,
+        strokeColor: color ,
+        strokeWeight: 4
+            }    
+        });
+     data3.addListener('mouseover', function (e) {
+        bgcolor = e.feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B';
+      $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('MapName')).show()
+    })
+
+    data3.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })  
+
+    data3.addListener('click', function(e) {
+	    data3.revertStyle();
+        data3.overrideStyle(e.feature,{ 
+		 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    data3.addListener('click', function(e) {
+	    data1.revertStyle();
+	    datatrop.revertStyle();
+	    data4.revertStyle();
+	    dataextf.revertStyle();
+		datardop.revertStyle();
+		datardexp.revertStyle();
+	    datardo.revertStyle();
+        datardexp_minor.revertStyle();
+
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+		
+  	var tips = [];
+        for (var i = 1; i <= 22; i++) {
+        	if (e.feature.getProperty('tip'+i)) {
+        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+        	}
+        }
+	  //  + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+	  
+      var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('MapName')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td>'+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table><br>'
+		+ (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+            +  '<form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+         +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Preservation Transit Linear
+
+// Start Opertaional Transit Linear
+    datatrop = new google.maps.Data();
+    datatrop.loadGeoJson('data/op_tr.js');
+    datatrop.setMap(map);
+    datatrop.setStyle(function (feature) {
+          color = feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B'
+    return {
+        clickable: true,
+        fillOpacity: .5,   
+		fillColor: color,
+        strokeColor: color,
+        zIndex:94,
+        strokeWeight: 4
+            }
+        
+        });
+
+    datatrop.addListener('mouseover', function (e) {
+      bgcolor = e.feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B';
+      $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    datatrop.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })  
+
+    datatrop.addListener('click', function(e) {
+	     datatrop.revertStyle();
+        datatrop.overrideStyle(e.feature,{ 
+		 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    datatrop.addListener('click', function(e) {
+	    data1.revertStyle();
+		data3.revertStyle();
+	    data4.revertStyle();
+	    dataextf.revertStyle();
+	    datardop.revertStyle();
+		datardexp.revertStyle();
+	    datardo.revertStyle();
+	    datardexp_minor.revertStyle();
+
+		  	var tips = [];
+        for (var i = 1; i <= 22; i++) {
+        	if (e.feature.getProperty('tip'+i)) {
+        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+        	}
+        }
+	  //  + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+		
+
+		
+      var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td>'+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table><br>'
+	    + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+        +  '<form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+          +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Operational Transit Linear
+
+
+// Start Expansion Transit Linear
+    data4 = new google.maps.Data();
+    data4.loadGeoJson('data/exp_tr.js');
+    data4.setMap(map);
+    data4.setStyle(function (feature) {
+          color = feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B'
+    return {
+        clickable: true,
+        fillOpacity: .5,
+		fillColor: color,
+        strokeColor: color ,
+        zIndex:93,
+        strokeWeight: 4
+            }
+        
+        });
+	
+   data4.addListener('mouseover', function (e) {
+         bgcolor = e.feature.getProperty("VisionType") == 'Transit - Funded' ? '#69883A' : '#B4CA8B';
+      $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    data4.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })		
+
+    data4.addListener('click', function(e) {
+	     data4.revertStyle();
+        data4.overrideStyle(e.feature,{ 
+		 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    data4.addListener('click', function(e) {
+	    data1.revertStyle();
+		data3.revertStyle();
+	    datatrop.revertStyle();
+	    dataextf.revertStyle();
+	    datardop.revertStyle();
+		datardexp.revertStyle();
+	    datardo.revertStyle();
+        datardexp_minor.revertStyle();
+
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+		
+          if (e.feature.getProperty('TIP1a')==='0'){ var TIPA = '';}
+        else { var TIPA =  '<b>Tip Project(s): </b>  <a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('TIP1a')+'" target="_blank">'+ e.feature.getProperty('TIP1a')+'</a><br>';}
+
+         if (e.feature.getProperty('FACILITY')==='West Trenton Line'){ var footnote = '<i> Unfunded cost for inside the DVRPC region only</i>';}
+        else { var footnote =  '';}
+//       	var tips = [];
+//        for (var i = 1; i <= 22; i++) {
+//        	if (e.feature.getProperty('tip'+i)) {
+//        		tips.push('<a class="one" href="//www.dvrpc.org/asp/TIPsearch/'+ e.feature.getProperty('TIPYEAR')+'/'+ e.feature.getProperty('State')+'/Tip-Search/DetailPrintTIP.asp?projid='+ e.feature.getProperty('tip'+i)+'" target="_blank">'+ e.feature.getProperty('tip'+i)+'</a>');
+ //       	}
+//        }
+	  //  + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+	  
+      var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br><B>Location:</B> '+ e.feature.getProperty('LOC')
+		+'<br><B>State:</B> '+ e.feature.getProperty('State')
+		+'<br><B>Timing:</B> '+ e.feature.getProperty('Timing') +'<br>'
+        +footnote
+		+'<br><table class="infotable"><thead><tr><th>Total Funded Cost<br><i>(millions in Y-O-E $)</i></th><th>Unfunded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td>'+ numeral(e.feature.getProperty('FundCost')).format('($0,0.0)') +'</td><td> '+ numeral(e.feature.getProperty('UnfundCost')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table>'
+        +TIPA
+//	    + (tips.length > 0 ? '<b>Tip Project(s):</b> ' + tips.join(', ') : '')
+            +  '<form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+         +' </form>'
+     ;
+
+       $('#infosidebar').html(content);
+    });
+
+//end Expansion Transit Linear
+
+// Start External Funded
+    dataextf = new google.maps.Data();
+    dataextf.loadGeoJson('data/ext.js');
+    dataextf.setMap(map);
+    dataextf.setStyle(function (feature) {
+	 color2 = feature.getProperty("VisionType") == 'Externally Funded' ? '#795300' : '#B4CA8B'
+     color = feature.getProperty("VisionType") == 'Externally Funded' ? '#795300' : '#B4CA8B'
+    return {
+        clickable: true,
+        fillOpacity: .5,
+		fillColor: '#795300',	
+        strokeColor: color ,
+        zIndex:92,
+        strokeWeight: 4
+            }
+        
+        });
+		
+    dataextf.addListener('mouseover', function (e) {
+         bgcolor = e.feature.getProperty("VisionType") == 'Transit - Funded' ? '#795300' : '#795300';
+      $('#tooltip2').css({background: bgcolor}).text(e.feature.getProperty('FACILITY')).show()
+    })
+
+    dataextf.addListener('mouseout', function (e) {
+      $('#tooltip2').hide()
+    })	
+
+    dataextf.addListener('click', function(e) {
+	     dataextf.revertStyle();
+        dataextf.overrideStyle(e.feature,{ 
+	//	 clickable: true,
+        fillOpacity: .5,   
+        strokeColor: '#ff0000' ,
+        strokeWeight: 4
+		});
+    });
+    
+    dataextf.addListener('click', function(e) {
+	    data1.revertStyle();
+		data3.revertStyle();
+		data4.revertStyle();
+		datatrop.revertStyle();
+		datardop.revertStyle();
+		datardexp.revertStyle();
+		datardo.revertStyle();
+        datardexp_minor.revertStyle();
+
+		if (e.feature.getProperty('Website')==='N/A'){ var Website = '';}
+		else { var Website =  '<br><B>Website:</B> <a class="one" href="'+ e.feature.getProperty('Website')+'" target="_blank">'+ e.feature.getProperty('Website')+'</a>';}
+		
+      var content = '<h4 style="color:white;background-color:'+e.feature.getProperty('BanColor')+'"><img style="margin:0px 0px 0px 0px" src="'+e.feature.getProperty('TYPE_IMG')+'"/>' + e.feature.getProperty('FACILITY')+'</h4>'
+        +'<B>Project Scope:</B> '+ e.feature.getProperty('PROJSCOPE')  
+		+Website
+        +'<br>Location: '+ e.feature.getProperty('LOC')
+		+'<br>State: '+ e.feature.getProperty('State')
+		+'<br>Timing: '+ e.feature.getProperty('Timing')
+		+'<br><table class="infotable"><thead><tr><th>Total Funded Cost<br><i>(millions in 2013 $)</i></th></tr></thead>'
+		+'<tbody><tr><td>'+ numeral(e.feature.getProperty('External_C')).format('($0,0.0)') +'</td></tr></tbody>'
+		+'</table><br>'
+            +  '<form class="form-inline" role="form">'
+                    +'<div class="form-group"><a href="#" id="zoomToBtn" class="btn btn-primary" data-location1=" '+e.feature.getProperty('LAT')+' " data-location2=" '+e.feature.getProperty('LONG')+' ">Zoom To</a></div>'
+          +' </form>'
+		;
+
+       $('#infosidebar').html(content);
+    });
+
+//end External Funded
+
+//County Bndy
+ $.getJSON('data/cnty.js', function(d) {
+    var data = new google.maps.Data({map: map, style:{
+        clickable: false,
+        zIndex:10,
+         fillOpacity: .0,   
+         strokeColor: 'grey',
+         strokeWeight: 3
+             }});
+    data.addGeoJson(d);
+ });
+
+
+$(document).on('click', '#zoomToBtn', function (e) {
+  var Loc = new google.maps.LatLng($(this).data('location1'), $(this).data('location2'));
+  e.preventDefault()
+  map.setZoom(13);
+  map.setCenter(Loc);
+//}).on('click', '#STV', function (e) {
+//  e.preventDefault()
+//  map.getStreetView().setPosition(new google.maps.LatLng($(this).data('location1'), $(this).data('location2')))
+//  map.getStreetView().setPov({heading: 10, pitch: 0})
+//  map.getStreetView().setVisible(true)
+}).on('click', '#zoomToRegion', function () {
+  map.setCenter(region);
+  map.setZoom(9);
+}).on('click', '#layer-list a', function (e) {
+  $(this).parent().toggleClass('enabled');
+  var layerlist = $('#layer-list .enabled a').map(function () { return $(this).data('type'); }).toArray();
+  datageojson.forEach(function (feature) {
+    datageojson.revertStyle(feature);
+    if ($.inArray(feature.getProperty('CATEGORY'), layerlist) === -1) {
+      datageojson.overrideStyle(feature, {visible: false});
+    }
+  });
+  e.preventDefault();
+});
+  
+  google.maps.event.addListener(map, 'click', function() {
+   // map.setZoom(8);
+	data1.revertStyle();
+    data3.revertStyle();
+    data4.revertStyle();
+	datatrop.revertStyle();
+	dataextf.revertStyle();
+    datardop.revertStyle();
+    datardexp.revertStyle();
+    datardo.revertStyle();
+    datardexp_minor.revertStyle();
+	var content = '';
+	$('#infosidebar').html(content);
+//	document.getElementById('addr').value="";
+  });
+
+  
+  map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(
+  document.getElementById('legend'));
+  }
+
+   google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+<!-- Start Modals -->
+<div class="modal fade" id="aboutModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">DVRPC - Connections 2040 Major Regional Projects</h4>
+                </div>
+
+                <div class="modal-body">
+				<div class="clearfix">
+                     <ul id="aboutTabs" class="nav nav-tabs">
+                        <li class="active"><a href="#about" data-toggle="tab"><i class="icon-question-sign"></i>&nbsp;About</a></li>
+                        <li><a href="#mrp" data-toggle="tab"><i class="icon-info-sign"></i>&nbsp;Major Regional Projects</a></li>
+                        <li><a href="#disclaimer" data-toggle="tab"><i class="icon-exclamation-sign"></i>&nbsp;Disclaimer</a></li>
+                        <li><a href="#contact" data-toggle="tab"><i class="icon-envelope"></i>&nbsp;Contact</a></li>
+                     
+                    </ul>
+                    <div id="aboutTabsContent" class="tab-content" style="padding-top: 10px;">
+                        <div class="tab-pane fade active in" id="about">
+						<p>
+						The <i><a href="//www.dvrpc.org/asp/pubs/publicationabstract.asp?pub_id=14049" target="_new">Connections 2040 Plan</a></i> includes a Vision Plan of desired transportation investments. Federal requirements mandate that the Long-Range Plan be fiscally constrained and only include projects that can be funded with reasonably anticipated revenue sources. Due to the gap between future needs and anticipated funding, not all identified projects in the Vision Plan are able to be included in the fiscally constrained financial plan. The financial plan allocates revenue to different categories, and there are separate budgets for the Pennsylvania and New Jersey portions of the DVRPC region. These categories serve as placeholders for funding projects over the life of the Plan. The table below shows how revenue is allocated to different funding categories for both roadway and transit projects.</p>
+                    <div class="tabbable">
+                        <ul class="nav nav-pills">
+
+						 <li class="active"><a href="#tab3" data-toggle="tab">&nbsp;Roadway</a></li> 
+                          <li><a href="#tab4" data-toggle="tab">Transit</a></li>
+                           </ul>
+                           <div class="tab-content">
+                                <div class="tab-pane active" id="tab3">
+                        <p><img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rds_funds.png" /></p>
+                          </div>
+                          <div class="tab-pane" id="tab4">
+                              <p><img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/transit_funds.png" /></p>
+                           </div>
+                           </div>
+                    </div>            
+
+                    <p><img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/total_funds.png" /></p>
+                        </div>
+                <div class="tab-pane fade " id="mrp">
+
+                        <p>Major Regional Projects are large-scale projects that will have a significant impact on regional travel. Almost all system expansion projects are Major Regional Projects, as are many reconstruction projects on the region’s freeways, and major operational improvement initiatives, such as SEPTA’s fare modernization project. Many more smaller-scale projects were identified in the needs assessment and funding for them was allocated in the Plan, but for the sake of brevity, they are not specifically identified or listed in the Plan. Major Regional Project needs that cannot be afforded are not included in the fiscally-constrained plan, and are shown as unfunded.
+                        <br><br>
+                        For a description of project categories, <a data-dismiss="modal" onclick="$('#LegendModal').modal('show'); return false;$('#About').modal('hide');">click here</a>. <br>    
+                        Some projects do not have geographic limits and cannot be mapped, <a data-dismiss="modal" onclick="$('#UMModal').modal('show'); return false;$('#About').modal('hide');"> click here for a list of unmapped projects</a>.
+                                        
+                        </p>              
+
+                        </div>
+        
+                        <div class="tab-pane fade" id="disclaimer">
+                            <p>This web page is a public resource of general information. The Delaware Valley Regional Planning Commission (DVRPC) makes no warranty, 
+							representation, or guarantee as to the content, sequence, accuracy, timeliness, or completeness of any of the spatial data or database 
+							information provided herein. DVRPC and partner state, local, and other agencies shall assume no liability for errors, omissions, or 
+							inaccuracies in the information provided regardless of how caused; or any decision made or action taken or not taken by any person relying 
+							on any information or data furnished within.</p>
+                        </div>
+                                <div class="tab-pane fade " id="contact">
+                                <p><b>Michael Boyer</b><br/>
+                                    Manager<br>
+                                    Office of Long-Range Planning and Economic Coordination<br/>
+                                    Phone: 215-238-2848 <br/>
+                                    <a href="mailto:mboyer@dvrpc.org">mboyer@dvrpc.org </a> 
+                                  </p>
+                                 <p>
+                                   <b>Brett Fusco</b><br/>
+                                    Assistant Manager<br>
+                                    Long-Range Planning <br/>
+                                    Phone: 215-238-2937 <br/>
+                                    <a href="mailto:bfusco@dvrpc.org">bfusco@dvrpc.org </a> 
+                                    </p>
+                                    
+                        </div>
+                      
+                    </div>
+                </div>
+		 </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+	
+   <div class="modal fade" id="LegendModal">
+        <div class="modal-dialog modal-lg" style="width: 875px;">
+            <div class="modal-content" style="overflow:hidden">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        Project Category Description
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <ul id="legendTabs" class="nav nav-tabs nav-stacked nav-left">
+                                <li class="active">
+                                    <a href="#rd_prTab" data-toggle="tab" data-bg="#3C3C3C">Roadway System Preservation</a>
+                                       <!-- <i class="icon-info-sign"></i>&nbsp;Roadway System Preservation</a> -->
+                                </li>
+                                <li>
+                                    <a href="#rd_opTab" data-toggle="tab" data-bg="#991f31">Roadway Operational Improvements</a>
+                                </li>
+                                <li>
+                                    <a href="#rd_expTab" data-toggle="tab" data-bg="#60afa1">Roadway System Expansion</a>
+                                </li>
+                                <li>
+                                    <a href="#rd_otherTab" data-toggle="tab" data-bg="#a6c834">Roadway Other</a>
+                                </li>
+                                <li>
+                                    <a href="#tr_prTab" data-toggle="tab" data-bg="#006886">Transit System Preservation</a>
+                                </li>
+                                <li>
+                                    <a href="#tr_opTab" data-toggle="tab" data-bg="#3b8448">Transit Operational Improvements</a>
+                                </li>
+                                <li>
+                                    <a href="#tr_expTab" data-toggle="tab" data-bg="#db182e">Transit System Expansion</a>
+                                </li>
+                                 <li>
+                                    <a href="#tr_otherTab" data-toggle="tab" data-bg="#db182e">Transit Other*</a>
+                                </li>
+                                <li>
+                                    <a href="#ext_fundTab" data-toggle="tab" data-bg="#e38225">External Funded</a>
+                                </li>
+                                <li>
+                                    <a href="#bikepedTab" data-toggle="tab" data-bg="#e38225">Bike and Pedestrian*</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-7">
+                    <div id="legendTabsContent" class="tab-content">
+
+                    <div class="tab-pane fade active in" id="rd_prTab">
+                    <h4 class="modal-title" style="color:black">Roadway System Preservation</h4>
+                    <p>These projects maintain existing roadway pavement and bridge infrastructure. Needs estimates were developed using the federally required Pavement Management System and Bridge Management System databases, which track the condition of each roadway lane mile and bridge, and include needs estimates for county and local roadways and bridges that are eligible for federal aid.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#24527F">Funded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rdf_pr.png" />
+                    <p style="color:#24527F">Projects in this category are included in the fiscally constrained financial plan.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#90ABD9">Unfunded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rduf_pr.png" />
+                    <p style="color:#90ABD9">Projects in this category are not able to be included in the fiscally constrained financial plan, but are considered critical to achieving the Plan’s vision.</p>
+                    </div>
+
+                    <div class="tab-pane fade" id="rd_opTab">
+                    <h4 class="modal-title" style="color:black">Roadway Operational Improvements</h4>
+                    <p>These projects use physical changes or technology to improve the efficiency of the existing network. Physical improvements include intersection/interchange reconstruction, new turn lanes, and roadway realignment, to improve the functionality and safety of the roadway network. Technological improvements include the use of Intelligent Transportation Systems (ITS), incident management programs, or traffic signal upgrades.
+                    </p>    
+                    <br>
+                    <h5 class="modal-title" style="color:#24527F">Funded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rdf_op.png" />
+                    <p style="color:#24527F">Projects in this category are included in the fiscally constrained financial plan.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#90ABD9">Unfunded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rduf_op.png" />
+                    <p style="color:#90ABD9">Projects in this category are not able to be included in the fiscally constrained financial plan, but are considered critical to achieving the Plan’s vision.</p>
+                    </div>
+
+                    <div class="tab-pane fade" id="rd_expTab">
+                    <h4 class="modal-title" style="color:black">Roadway System Expansion</h4>
+                    <p>These projects add capacity to the roadway network by widening or extending existing facilities, or building new roads or interchanges. The need for major regional projects was based on the projects included in the Connections 2035 Plan, a review of recent transportation and corridor studies, and a call for projects from planning partners. All roadway system expansion projects are required to be consistent with the region’s Congestion Management Process (CMP) and are evaluated to be consistent with land use, environmental, economic development, and transportation goals.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#24527F">Funded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rdf_ex.png" />
+                    <p style="color:#24527F">Projects in this category are included in the fiscally constrained financial plan.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#90ABD9">Unfunded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/rduf_ex.png" />
+                    <p style="color:#90ABD9">Projects in this category are not able to be included in the fiscally constrained financial plan, but are considered critical to achieving the Plan’s vision.</p>
+                    </div>
+
+                    <div class="tab-pane fade" id="rd_otherTab">
+                    <h4 class="modal-title" style="color:black">Roadway Other</h4>
+                 <!--    <h5 class="modal-title" style="color:#90ABD9">Unfunded</h5> -->
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/other_rd.png" />
+                    <p>These projects include needs for miscellaneous items, such as parking facilities, drainage, environmental mitigation, Transportation Management Associations (TMAs), engineering, regional and local planning, and debt service. These needs are based on forecasting future need based on projects and costs that are included in the current Transportation Improvement Programs (TIP) for Pennsylvania and New Jersey.</p>
+                    </div>
+                                
+                    <div class="tab-pane fade" id="tr_prTab">
+                    <h4>Transit System Preservation</h4>
+                    <p>These projects represent needs for existing rail infrastructure, vehicle fleets, and stations. Regular vehicle track, signal, catenary, power substations, signals, vehicle overhaul and replacement, station renovations, and ADA accessibility needs were used to develop the need for each of these three categories using asset management data. </p>
+                    <br>
+                    <h5 class="modal-title" style="color:#69883A">Funded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/tf_pr.png" />
+                    <p style="color:#69883A">Projects in this category are included in the fiscally constrained financial plan.</p>
+                    <br> 
+                    <h5 class="modal-title" style="color:#B4CA8B">Unfunded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/tuf_pr.png" />
+                    <p style="color:#B4CA8B">Projects in this category are not able to be included in the fiscally constrained financial plan, but are considered critical to achieving the Plan’s vision.</p>
+                    </div>
+
+                    <div class="tab-pane fade" id="tr_opTab">
+                    <h4>Transit Operational Improvements</h4>
+                    <p>These projects aim to improve the functionality of the existing system. Types of projects include real-time information systems, signal preemption, fare modernization, and double tracking and sidings to improve service frequency. The estimated needs were developed by DVRPC and regional transit agencies.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#69883A">Funded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/tf_op.png" />
+                    <p style="color:#69883A">Projects in this category are included in the fiscally constrained financial plan.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#B4CA8B">Unfunded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/tuf_op.png" />
+                    <p style="color:#B4CA8B">Projects in this category are not able to be included in the fiscally constrained financial plan, but are considered critical to achieving the Plan’s vision.</p>
+                    </div>
+
+                    <div class="tab-pane fade" id="tr_expTab">
+                    <h4>Transit System Expansion</h4>
+                    <p>These projects include new transit facilities, routes, and lines that the region would like to pursue. Need for this category is based on a short list of projects developed by the long-range plan subcommittee and includes projects listed in the Connections 2035 Plan and DVRPC’s Long-Range Vision for Transit Report. </p>
+                    <br>
+                    <h5 class="modal-title" style="color:#69883A">Funded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/tf_ex.png" />
+                    <p style="color:#69883A">Projects in this category are included in the fiscally constrained financial plan.</p>
+                    <br>
+                    <h5 class="modal-title" style="color:#B4CA8B">Unfunded</h5>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/tuf_ex.png" />
+                    <p style="color:#B4CA8B">Projects in this category are not able to be included in the fiscally constrained financial plan, but are considered critical to achieving the Plan’s vision.</p>
+                    </div>
+
+                    <div class="tab-pane fade" id="tr_otherTab">
+                    <h4>Transit Other</h4>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/other_tr.png" />
+                    <p><font style="color:grey;"><i>***These projects are not mapped.***</i></font></p>
+                    <p>A miscellaneous category that includes safety, security, coordinated human services, and debt service. Need for this category is estimated by remaining debt obligation payments and accounting for outlays over the life of the plan based on current and future expenditures.
+                    </br>    
+                    <a data-dismiss="modal" onclick="$('#UMModal').modal('show'); return false;$('#About').modal('hide');"> click here to view a list of unmapped projects</a></p>
+                    </div>
+
+                    <div class="tab-pane fade" id="ext_fundTab">
+                    <h4>External Funded</h4>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/ext_fund.png" />
+                    <p>Projects that do not receive any Federal funding. They are generally carried out by toll authorities. DVRPC coordinates with the sponsoring agency on these projects, and includes them in its air quality conformity analysis. </p>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="bikepedTab">
+                    <h4>Bike and Pedestrian</h4>
+                    <img class="infologo" style="float:left;margin:0px 10px 0px 0px" src="img/bikeped.png" />
+                    <p><font style="color:grey;"><i>***These projects are not mapped.***</i></font></p>
+                    <p>Identified projects reflect the region’s desire to be more bike and pedestrian friendly. On-road needs are based on current funding levels in the Pennsylvania and New Jersey Transportation Improvement Programs, as well as additional targeted funding levels to increase the region’s investment in such facilities. Off-road needs are based on constructing all unbuilt, multiuse trails in The Circuit Regional Trail Network. Specific links of the Circuit will be funded through future iterations of the TIP.
+                    </br>    
+                    <a data-dismiss="modal" onclick="$('#UMModal').modal('show'); return false;$('#About').modal('hide');"> click here to view a list of unmapped projects</a></p>
+                    </div>
+                       
+                        
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+ 
+<!-- Start Modals -->
+<div class="modal fade" id="UMModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Unmapped Projects</h4>
+                </div>
+
+                <div class="modal-body">
+                <div class="clearfix">
+                     <ul id="aboutTabs" class="nav nav-tabs" style="font-size:12px;">
+                        <li class="active"><a href="#about2" data-toggle="tab" ><img src="img/bikeped.png" style="height:25px;width:25px;"/> &nbsp;Bicycle and Pedestrian</a></li>
+                        <li><a href="#trpr" data-toggle="tab" ><img src="img/pr_tr.png" style="height:25px;width:25px"/>&nbsp;Transit System Preservation</a></li>
+                        <li><a href="#disclaimer2" data-toggle="tab"><img src="img/ex_tr.png" style="height:25px;width:25px;"/> &nbsp;Transit Operational Improvements</a></li>
+                            <li><a href="#disclaimer3" data-toggle="tab"><img src="img/ext_fundL.png" style="height:25px;width:25px;"/> &nbsp;External Funded</a></li>
+                    </ul>
+                    <div id="aboutTabsContent" class="tab-content" style="padding-top: 10px;">
+        <div class="tab-pane fade active in" id="about2">   
+<table class="gridtable">
+ <tr>   <th>    Facility    </th>   <th>    Project Scope   </th>   <th>    Location    </th>   <th>    Timing  </th>   <th>    Funded Cost (millions in Y-O-E $)   </th>   <th>    Unfunded Cost  (millions in 2013 $) </th>   <th>        Website     </th>
+<tr>    <td>    The Circuit in Pennsylvania </td>   <td>    Construct 300 multiuse trail miles  </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2040   </td>   <td>    161.9   </td>   <td>    27.6    </td>   <td>    <a href="https://connectthecircuit.org/" target="_new">  https://connectthecircuit.org/   </a>    </td>
+<tr>    <td>    The Circuit in New Jersey   </td>   <td>    Construct 145 multiuse trail miles  </td>   <td>    New Jersey Subregion    </td>   <td>    2014-2040   </td>   <td>    99.7    </td>   <td>    22.2    </td>   <td>    <a href="https://connectthecircuit.org/" target="_new">  https://connectthecircuit.org/</a></td>
+</table>
+
+        </div>
+               
+        <div class="tab-pane fade " id="trpr">
+                  <table class="gridtable">
+           <tr> <th>    Facility    </th>   <th>    Project Scope   </th>   <th>    Location    </th>   <th>    Timing  </th>   <th>    Funded Cost (millions in Y-O-E $)   </th>   <th>        TIP     </th>   </tr>
+<tr>    <td>    SEPTA Regional Rail lines   </td>   <td>    Positive Train Control  </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2018   </td>   <td>    72.8    </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=60255" target="_new">  60255   </a>    </td>   </tr>
+<tr>    <td>    Trenton, Wilmington, and Paoli-Thorndale lines  </td>   <td>    Amtrak lease agreements for trackage rights </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2040   </td>   <td>    1762.1  </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=59966" target="_new">  59966   </a>    </td>   </tr>
+<tr>    <td>    NJ Transit Buses    </td>   <td>    Procure 358 40' and 288 45' buses   </td>   <td>    New Jersey Subregion    </td>   <td>    2014-2040   </td>   <td>    539.4   </td>   <td>        -   </a>    </td>   </tr>
+<tr>    <td>    NJ Transit NE Corridor Rail vehicles    </td>   <td>    Replace 42 commuter rail vehicles   </td>   <td>    Mercer County, NJ   </td>   <td>    2025-2040   </td>   <td>    284.6   </td>   <td>        -   </a>    </td>   </tr>
+<tr>    <td>    SEPTA Buses </td>   <td>    Normal replacement of vehicles  </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2040   </td>   <td>    1325.4  </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=90512" target="_new">  90512   </a>    </td>   </tr>
+<tr>    <td>    SEPTA Rail Vehicles </td>   <td>    Purchase of new locomotives, bi-level coaches, trolleys, Silverliner VIs, and Broad Street Line vehicles    </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2040   </td>   <td>    3887.5  </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=60638" target="_new">  60638   </a>    </td>   </tr>
+<tr>    <td>    Computer Aided Radio Dispatch (CARD) system </td>   <td>    Signal and communication system upgrades and replacements   </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2024   </td>   <td>    32.5    </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=102571" target="_new"> 102571  </a>    </td>   </tr>
+<tr>    <td>    Real Time Information   </td>   <td>    New passenger information at rail and transit stations  </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2040   </td>   <td>    30.1    </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=102571" target="_new"> 102571  </a>    </td>   </tr>
+<tr>    <td>    Vehicle Maintenance Facilities  </td>   <td>    Steel wheel lift program, wheel truing program, and washers </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2024   </td>   <td>    45.2    </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=102569" target="_new"> 102569  </a>    </td>   </tr>
+<tr>    <td>    Building Maintenance Program    </td>   <td>    Boiler program, tank program, emergency generators, fire suppression    </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2024   </td>   <td>    44.4    </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=102569" target="_new"> 102569  </a>    </td>   </tr>
+<tr>    <td>    Rail Yard Storage    </td>   <td>    Expansion program   </td>   <td>    Pennsylvania Subregion  </td>   <td>    2019-2024   </td>   <td>    34.5    </td>   <td>    <a href="//www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=103626" target="_new"> 103626  </a>    </td>   </tr>
+                </table>  
+        </div>
+        
+        <div class="tab-pane fade" id="disclaimer2">
+                <table class="gridtable">
+                    <tr>    <th>    Facility    </th>   <th>    Project Scope   </th>   <th>    Location    </th>   <th>    Timing  </th>   <th>    Funded Cost (millions in Y-O-E $)   </th>   <th>    Unfunded Cost  (millions in 2013 $) </th>   <th>                TIP     </th>   <th>    Website </th>   </tr>
+<tr>    <td>    Norristown Line </td>   <td>    3rd Track   </td>   <td>    Montgomery County, PA   </td>   <td>    2019-2030   </td>   <td>    34.5    </td>   <td>    0   </td>   <td>    <a href="   //www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=102565  " target="_new">    102565  </a>    </td>   <td>        </td>   </tr>
+<tr>    <td>    West Trenton Line Grade Separation  </td>   <td>    Grade separation between freight rail and transit.  </td>   <td>    Bucks County, PA    </td>   <td>    2014-2018   </td>   <td>    5.8 </td>   <td>    0   </td>   <td>    <a href="   //www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=98235   " target="_new">    98235   </a>    </td>   <td>        </td>   </tr>
+<tr>    <td>    Routes 23 and 56 Trolley Restoration    </td>   <td>    Trolley vehicle purchase and improvements for entire routes </td>   <td>    Philadelphia County, PA </td>   <td>    Unfunded    </td>   <td>    2   </td>   <td>    317 </td>   <td>    <a href="   //www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=102566  " target="_new">    102566  </a>    </td>   <td>        </td>   </tr>
+<tr>    <td>    Atlantic City Line Service Frequency Improvements   </td>   <td>    Siding and station improvements, new vehicles for increased service frequency   </td>   <td>    Camden County, NJ   </td>   <td>    2025-2040   </td>   <td>    152.4   </td>   <td>    0   </td>   <td>                -       </td>   <td>        </td>   </tr>
+<tr>    <td>    Fare Payment Modernization  </td>   <td>    Updated Fare Collection System Systemwide   </td>   <td>    Pennsylvania Subregion  </td>   <td>    2014-2018   </td>   <td>    203.3   </td>   <td>    0   </td>   <td>    <a href="   //www.dvrpc.org/asp/TIPsearch/2015/PA/Tip-Search/DetailPrintTIP.asp?projid=60611   " target="_new">    60611   </a>    </td>   <td>    <a href="https://www.septa.org/fares/npt/" target=_"new">https://www.septa.org</a> </td>   </tr>
+<tr>    <td>    Regional Rail System - Core Capacity Program    </td>   <td>    Interlockings, sidings, flyovers, and freight separation projects to increase service frequency on regional rail lines  </td>   <td>    Bucks, Delaware, Montgomery, and Philadelphia Counties  </td>   <td>    2025-2040   </td>   <td>    210 </td>   <td>    0   </td>   <td>                -       </td>   <td>        </td>   </tr>
+
+                </table>  
+        </div>
+
+        <div class="tab-pane fade" id="disclaimer3">
+                <table class="gridtable">
+          <tr>  <th>    Facility    </th>   <th>    Project Scope   </th>   <th>    Location    </th>   <th>    Timing  </th>   <th>    Funded Cost (millions in Y-O-E $)   </th>   <th>    Website </th>   </tr>
+<tr>    <td>    Atlantic City Expressway    </td>   <td>    All Electronic Tolling  </td>   <td>    Camden, and Gloucester Counties </td>   <td>    2014-2017   </td>   <td>    50  </td>   <td></td>   </tr>
+<tr>    <td>    PA Turnpike </td>   <td>    All Electronic Tolling  </td>   <td>    Bucks, Chester, and Montgomery Counties </td>   <td>    2014-2024   </td>   <td>    257 </td>   <td>    <a href="https://www.paturnpike.com/aet_public/aet.asp" target="_new"> https://www.paturnpike.com</a> </td>   </tr>
+
+                </table>  
+        </div>
+              
+                    </div>
+                </div>
+         </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+	
+<div id="legend">
+<img style="margin:0px 10px 0px 0px" src="img/legend.png" />	 
+</div>
+
+  <script>var _gaq=[['_setAccount','UA-9825778-1'],['_trackPageview']];(function(d){var g=d.createElement('script'),s=d.scripts[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document))</script>
+  
+  </body>
+</html>

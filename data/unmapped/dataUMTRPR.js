@@ -1,0 +1,122 @@
+var dataUMTRPR = [
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "SEPTA Regional Rail lines",
+    "ProjScope": "Positive Train Control",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2018",
+    "FundCost": 72.8,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "AC",
+    "MPMS/DB_1": 60255
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "Trenton, Wilmington, and Paoli-Thorndale lines",
+    "ProjScope": "Amtrak lease agreements for trackage rights",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2040",
+    "FundCost": 1762.1,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "T1.06",
+    "MPMS/DB_1": 59966
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "NJ Transit Buses",
+    "ProjScope": "Procure 358 40' and 288 45' buses",
+    "Location": "New Jersey Subregion",
+    "Timing": "2014-2040",
+    "FundCost": 539.4,
+    "VisionType": "Transit - Funded",
+    "State": "NJ",
+    "MRP_ID": "T2.01N",
+    "MPMS/DB_1": "N/A"
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "NJ Transit NE Corridor Rail vehicles",
+    "ProjScope": "Replace 42 commuter rail vehicles",
+    "Location": "Mercer",
+    "Timing": "2025-2040",
+    "FundCost": 284.6,
+    "VisionType": "Transit - Funded",
+    "State": "NJ",
+    "MRP_ID": "BY",
+    "MPMS/DB_1": "N/A"
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "SEPTA Buses",
+    "ProjScope": "Normal replacement of vehicles",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2040",
+    "FundCost": 1325.4,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "T2.01P",
+    "MPMS/DB_1": 90512
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "SEPTA Rail Vehicles",
+    "ProjScope": "Purchase of new locomotives, bi-level coaches, trolleys, Silverliner VIs, and Broad Street Line vehicles",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2040",
+    "FundCost": 3887.5,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "BG",
+    "MPMS/DB_1": 60638
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "Computer Aided Radio Dispatch (CARD) system",
+    "ProjScope": "Signal and communication system upgrades and replacements",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2024",
+    "FundCost": 32.5,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "BI",
+    "MPMS/DB_1": 102571
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "Real Time Information",
+    "ProjScope": "New passenger information at rail and transit stations",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2040",
+    "FundCost": 30.1,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "CD",
+    "MPMS/DB_1": 102571
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "Vehicle Maintenance Facilities",
+    "ProjScope": "Steel wheel lift program, wheel truing program, and washers",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2024",
+    "FundCost": 45.2,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "BX",
+    "MPMS/DB_1": 102569
+  },
+  {
+    "Type": "Preservation - Transit",
+    "Facility": "Building Maintenance Program",
+    "ProjScope": "Boiler program, tank program, emergency generators, fire suppression",
+    "Location": "Pennsylvania Subregion",
+    "Timing": "2014-2024",
+    "FundCost": 44.4,
+    "VisionType": "Transit - Funded",
+    "State": "PA",
+    "MRP_ID": "CC",
+    "MPMS/DB_1": 102569
+  }
+];
